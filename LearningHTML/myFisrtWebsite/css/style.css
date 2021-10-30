@@ -7,19 +7,17 @@ body {
 
 p {
     color: rgb(211, 208, 208);
-    
-}
-h1 {
-
+    font-size: 21px;   
 }
 
-div {
-    background: rgb(0, 0, 0) ;
-    width: 500px; 
-    /* height: 500px; */
-
+.intro {
+    font-size: 25px;
+    font-family: serif;
 }
-span {
-    color: mediumblue;
-    font-weight: bold;
+#top-section {
+    background-color: navy;
+}
+
+#bottom-section {
+    background-color: black;
 }
