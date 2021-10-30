@@ -1,0 +1,15 @@
+body {
+    background-color: rgb(230, 205, 191);
+    color: #fff;
+    font-size: 21px;
+    font-family: sans-serif;
+}
+
+p {
+    color: #000000;
+}
+h1 {
+    color: rgb(0, 0, 0);
+    font-size: 40px;
+    font-family: serif;
+}
