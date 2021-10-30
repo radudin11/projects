@@ -1,15 +1,25 @@
 body {
-    background-color: rgb(230, 205, 191);
-    color: #fff;
+    background-color: #152028;
+    color: #bb86fc;
     font-size: 21px;
     font-family: sans-serif;
 }
 
 p {
-    color: #000000;
+    color: rgb(211, 208, 208);
+    
 }
 h1 {
-    color: rgb(0, 0, 0);
-    font-size: 40px;
-    font-family: serif;
+
+}
+
+div {
+    background: rgb(0, 0, 0) ;
+    width: 500px; 
+    /* height: 500px; */
+
+}
+span {
+    color: mediumblue;
+    font-weight: bold;
 }
