@@ -21,3 +21,21 @@ p {
 #bottom-section {
     background-color: black;
 }
+
+/* the CSS Box Model */
+
+/* Margin: (-top/bottom/left)
+   Border:
+   Pasdding:
+*/
+
+.Box {
+    background-color: black;
+    width:  300px;
+
+    margin: 50px;
+    border-width: 5px;
+    border-color: #bb86fc;
+    border-style: solid;
+    padding: 10px 100px 300px 30px ;/*top right bottom left*/
+}
