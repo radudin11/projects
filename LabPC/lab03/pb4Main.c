@@ -5,8 +5,8 @@ int main() {
     int x;
     printf("Introduceti un numar: ");
     scanf("%d", &x);
-    int ver = este_palindorm(x);
-    if (ver == 1) {
+    int verify = este_palindorm(x);
+    if (verify == 1) {
         printf("Numarul %d este palindrom", x);
     }
     else {
