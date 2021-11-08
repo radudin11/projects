@@ -53,6 +53,7 @@ int main()
             findAdjacentTo(numberOfRows - 1, column, numberOfRows, numberOfColumns, matrix);
         }
     }
+    printMatrix(numberOfRows, numberOfColumns, matrix);
 
     for (row = 0; row < numberOfRows; row++) {
         for (column = 0; column < numberOfColumns; column++) {
@@ -76,7 +77,12 @@ void printMatrix(int numberOfRows, int numberOfColumns, int matrix[20][20]) {
     for (int i = 0; i < numberOfRows; i++) {
         printf("%s[", spaces4);
         for (int j = 0; j < numberOfColumns; j++) {
+            if(matrix[i][j] == 1)
+                printf("\033[00;31m");
+            if(matrix[i][j] == 2)
+                printf("\033[00;32m");
             printf("%d, ", matrix[i][j]);
+            printf("\033[00m");
         }
         printf("]\n");
     }
@@ -102,5 +108,3 @@ void findAdjacentTo(int row, int column, int numberOfRows, int numberOfComlumns,
 
     }
 }
-
-
