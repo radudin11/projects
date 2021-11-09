@@ -48,7 +48,7 @@ void print_vector(char v[20], int n)
     printf("\n");
 }
 
-void gaseste_operatii(char vector_de_operatii[8], int size, unsigned int instructiune) 
+void gaseste_operatii(char vector_de_operatii[8], int size, unsigned int instructiune)
 {
     instructiune <<= 3;
     char operatori[4] = "+-*/";
@@ -72,12 +72,39 @@ void gaseste_operatii(char vector_de_operatii[8], int size, unsigned int instruc
         instructiune <<= 2;
     }
 }
+int gaseste_dim(int N, unsigned int instructiune) 
+{
+    int permutare_biti = 3 + 2 * N;
+    int i, masca = 1 << 31, dim = 1;
+    instructiune <<= permutare_biti;
 
+    for (i = 0; i < 4; i++) {
+        if (masca & instructiune) {
+            switch (i) {
+            case 0:
+                dim += 8;
+                break;
+            case 1:
+                dim += 4;
+                break;
+            case 2:
+                dim += 2;
+                break;
+            case 3:
+                dim += 1;
+                break;
+            }
+
+        }
+        instructiune <<= 1;
+    }
+    return dim;
+}
 int main()
 {
     unsigned int masca = 1 << 31;
     unsigned int instructiune;
-    int i, N, dim;
+    int i, N, dim = 1;
     char operatii[8];
 
 
@@ -87,10 +114,13 @@ int main()
 
     N = findN(instructiune);
     gaseste_operatii(operatii, N, instructiune);
-   
+    dim = gaseste_dim(N, instructiune);
+
+
+
     printf("\nN = %d\n", N);
     print_vector(operatii, N);
-
+    printf("%d", dim);
 
 
     return 0;
