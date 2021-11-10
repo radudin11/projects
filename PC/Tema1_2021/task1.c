@@ -1,20 +1,37 @@
 #include <stdio.h>
+#define SIZE 20
+int gaseste_N(unsigned int instructiune);
+void char_print_vector(char v[SIZE], int n);
+void gaseste_operatii(char vector_de_operatii[8], int size, unsigned int instructiune);
+int gaseste_dim(int N, unsigned int instructiune);
+void afisare_elemente_task1_checker(int N, int dim, char operatii[8]);
+int main()
+{
+    /*interpretarea unei instructiuni date avand 
+    in vedere regulile din task1 al temei 1: 
+    https://ocw.cs.pub.ro/courses/programare/teme_2021/tema1_2021_cbd*/
 
-void afisareBin(unsigned int x) {
     unsigned int masca = 1 << 31;
-    unsigned int sizeInt = 8 * sizeof(unsigned int);
-    int i;
-    for (i = 0;i < sizeInt; i++) {
-        if (masca & x)
-            printf("1");
-        else
-            printf("0");
-        x <<= 1;
-    }
-    printf("\n");
-}
+    unsigned int instructiune;
+    int N, dim = 1;
+    char operatii[8];
 
-int findN(unsigned int instructiune) {
+
+    printf("Dati o instrctiune: ");
+    scanf("%u", &instructiune);
+
+    N = gaseste_N(instructiune);
+    gaseste_operatii(operatii, N, instructiune);
+    dim = gaseste_dim(N, instructiune);
+
+    afisare_elemente_task1_checker(N ,dim, operatii);
+
+    return 0;
+}
+int gaseste_N(unsigned int instructiune)
+{
+    /*returneaza valoarea intreaga determinata de cei mai significtivi
+    3 biti ai instructiunii*/
     unsigned int masca = 1 << 31;
     unsigned int N = 1;
     int i;
@@ -38,19 +55,21 @@ int findN(unsigned int instructiune) {
     return N;
 }
 
-void print_vector(char v[20], int n)
+void char_print_vector(char v[SIZE], int n)
 {
+    //afiseaza valorile dintr-un vector de char
     int i;
 
     for (i = 0; i < n; i++) {
         printf("%c ", v[i]);
     }
-    printf("\n");
 }
 
 void gaseste_operatii(char vector_de_operatii[8], int size, unsigned int instructiune)
 {
-    instructiune <<= 3;
+    //interpreteaza urmatorii 2 * N biti ai intructiunii dupa regula data
+
+    instructiune <<= 3;//trecem peste primii 3 biti
     char operatori[4] = "+-*/";
     int i;
     int masca = 1 << 31;
@@ -62,7 +81,7 @@ void gaseste_operatii(char vector_de_operatii[8], int size, unsigned int instruc
         if (masca & (instructiune << 1)) {
             operatie += 1;
         }
-        /*operatie:
+        /*regula operatie:
             0 = '+' (00)
             1 = '-' (01)
             2 = '*' (10)
@@ -72,12 +91,17 @@ void gaseste_operatii(char vector_de_operatii[8], int size, unsigned int instruc
         instructiune <<= 2;
     }
 }
-int gaseste_dim(int N, unsigned int instructiune) 
-{
-    int permutare_biti = 3 + 2 * N;
-    int i, masca = 1 << 31, dim = 1;
-    instructiune <<= permutare_biti;
 
+int gaseste_dim(int N, unsigned int instructiune)
+{
+    /*returneaza valoarea intreaga determinata de cei mai putin significativ
+    4 biti ai instructiunii*/
+
+    int permutare_biti = 3 + 2 * N;//unde se afla cei mai putin semnificativi 4 biti
+    unsigned int i, masca = 1 << 31, dim = 1;
+    instructiune <<= permutare_biti; //aliniem instructiunea cu masca
+
+    //transformare binar pe 4 biti in decimal
     for (i = 0; i < 4; i++) {
         if (masca & instructiune) {
             switch (i) {
@@ -100,28 +124,10 @@ int gaseste_dim(int N, unsigned int instructiune)
     }
     return dim;
 }
-int main()
+
+void afisare_elemente_task1_checker(int N, int dim, char operatii[8]) 
 {
-    unsigned int masca = 1 << 31;
-    unsigned int instructiune;
-    int i, N, dim = 1;
-    char operatii[8];
-
-
-    printf("Dati o instrctiune: ");
-    scanf("%u", &instructiune);
-
-
-    N = findN(instructiune);
-    gaseste_operatii(operatii, N, instructiune);
-    dim = gaseste_dim(N, instructiune);
-
-
-
-    printf("\nN = %d\n", N);
-    print_vector(operatii, N);
-    printf("%d", dim);
-
-
-    return 0;
+    printf("%d ", N);
+    char_print_vector(operatii, N);
+    printf("%d ", dim);
 }
