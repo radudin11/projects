@@ -36,13 +36,13 @@ int citeste_instructiune(FILE* file)
     if (file == NULL) {
         printf("Nici-un fisier gasit!\n");
         printf("Dati o instrctiune: ");
-        fscanf(stdin, "%u", instructiune);
+        fscanf(stdin, "%u", &instructiune);
     }
     else {
-        fscanf(file, "%u", instructiune);
+        fscanf(file, "%u", &instructiune);
         printf("Instructiunea este: ");
         printf("\033[0;32m");
-        printf("%u", instructiune);
+        printf("%u", &instructiune);
         printf("\033[0m");
     }
     return instructiune;
@@ -104,46 +104,8 @@ int main()
     unsigned short operanzi[SIZE];
     int numar_de_operanzi;
 
-    //numar_de_operanzi = citeste_operanzi(file, operanzi, N, dim);
-    int i = 0;
-    int contor = 0, pasi_in_numar = 16 / dim;
-    unsigned short input;
-
-    int numar_de_inputuri = ((N + 1) * dim) / 16;
-    if ((float)numar_de_inputuri < (float)(((N + 1) * dim) / 16.0)) {
-        numar_de_inputuri++;
-    }
-    int contor_de_inputuri = numar_de_inputuri;
-
-    printf("\nNumarul de inputuri este:");
-    printf("\033[0;32m");
-    printf("%d", numar_de_inputuri);
-    printf("\033[0m");
-
-    while (contor_de_inputuri) {
-        if (file == NULL) {
-            printf("\nMai aveti de dat %d input(uri): ", contor_de_inputuri);
-            fscanf(stdin, "%hu", &input);
-        }
-        else {
-            fscanf(file, "%hu", &input);
-            printf("\nInputul %d este: ", numar_de_inputuri - contor_de_inputuri + 1);
-            printf("\033[0;32m");
-            printf("%hu", input);
-            printf("\033[0m");
-        }
-        contor_de_inputuri--;
-
-        contor = 0;
-        while (N >= 0 && contor < pasi_in_numar) {
-            operanzi[i] = binar_in_decimal(&input, dim, &N);
-            contor++;
-            i++;
-        }
-    }
-
-    numar_de_operanzi = i;
-
+    numar_de_operanzi = citeste_operanzi(file, operanzi, N, dim);
+    
     printf("\nOperanzii sunt: ");
     printf("\033[0;32m");
     ushort_print_vector(operanzi, numar_de_operanzi);
