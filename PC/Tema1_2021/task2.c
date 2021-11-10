@@ -10,75 +10,36 @@ void gaseste_operatii(char vector_de_operatii[8], int size, unsigned int instruc
 int gaseste_dim(int N, unsigned int instructiune);  
 unsigned short binar_in_decimal(unsigned short* numar, int dim, int* N);
 int citeste_operanzi(FILE* file, unsigned short operanzi[SIZE], int N, int dim);
+void afiseaza_intro();
+unsigned int citeste_instructiune(FILE* file);
 
-void afiseaza_intro()
-{
-    char anunt[] = "!!Daca doriti sa dati valorile de la tastatura introduceti orice caracter si apasati enter!!";
-    char spatii4[] = "    ";
-    printf("\033[0;31m");
-    printf("%s%s\n", spatii4, anunt);
-    printf("\033[0m");
-
-
-}
-void citeste_fisier(FILE* file)
+/* void citeste_fisier(FILE* file)
 {
     char nume_fisier[SIZE];
     printf("\nIntroduceti numele/calea absoluta a fisierului de test: ");
     fscanf(stdin, "%s", nume_fisier);
     file = fopen(nume_fisier, "r");
     
-}
-
-int citeste_instructiune(FILE* file)
-{
-    unsigned int instructiune;
-    if (file == NULL) {
-        printf("Nici-un fisier gasit!\n");
-        printf("Dati o instrctiune: ");
-        fscanf(stdin, "%u", &instructiune);
-    }
-    else {
-        fscanf(file, "%u", &instructiune);
-        printf("Instructiunea este: ");
-        printf("\033[0;32m");
-        printf("%u", &instructiune);
-        printf("\033[0m");
-    }
-    return instructiune;
-}
-
+} */
 int main()
 {
     /*interpretarea unei instructiuni date avand
     in vedere regulile din task1 al temei 1:
     https://ocw.cs.pub.ro/courses/programare/teme_2021/tema1_2021_cbd*/
+
     afiseaza_intro();
+
     FILE* file;
     char nume_fisier[SIZE];
     printf("\nIntroduceti numele/calea absoluta a fisierului de test: ");
     fscanf(stdin, "%s", nume_fisier);
     file = fopen(nume_fisier, "r");
-    //citeste_fisier(file);
-
+    
     unsigned int instructiune;
-    int N, dim = 1;
+    int N, dim ;
     char operatii[8];
 
-    if (file == NULL) {
-        printf("Nici-un fisier gasit!\n");
-        printf("Dati o instrctiune: ");
-        fscanf(stdin, "%u", &instructiune);
-    }
-    else {
-        fscanf(file, "%u", &instructiune);
-        printf("Instructiunea este: ");
-        printf("\033[0;32m");
-        printf("%u", instructiune);
-        printf("\033[0m");
-    }
-
-    //instructiune = citeste_instructiune(file);
+    instructiune = citeste_instructiune(file);
 
     N = gaseste_N(instructiune);
     gaseste_operatii(operatii, N, instructiune);
@@ -114,6 +75,36 @@ int main()
 
     return 0;
 
+}
+void afiseaza_intro()
+{
+    char anunt[] = "!!Daca doriti sa dati valorile de la tastatura introduceti orice caracter si apasati enter!!";
+    char spatii4[] = "    ";
+    printf("\033[0;31m");
+    printf("%s%s\n", spatii4, anunt);
+    printf("\033[0m");
+
+
+}
+
+unsigned int citeste_instructiune(FILE* file)
+{
+    /* citeste prima instructiune din file sau de la tastatura (daca file  == NULL)
+    si o returneza*/ 
+    unsigned int instructiune;
+    if (file == NULL) {
+        printf("Nici-un fisier gasit!\n");
+        printf("Dati o instrctiune: ");
+        fscanf(stdin, "%u", &instructiune);
+    }
+    else {
+        fscanf(file, "%u", &instructiune);
+        printf("Instructiunea este: ");
+        printf("\033[0;32m");
+        printf("%u", &instructiune);
+        printf("\033[0m");
+    }
+    return instructiune;
 }
 
 int gaseste_N(unsigned int instructiune)
