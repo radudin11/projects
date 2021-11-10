@@ -2,111 +2,76 @@
 #include <math.h>
 
 #define SIZE 20
-
+/*functii task1*/
 int gaseste_N(unsigned int instructiune);
 void char_print_vector(char v[SIZE], int n);
-void ushort_print_vector(unsigned short v[SIZE], int n);
 void gaseste_operatii(char vector_de_operatii[8], int size, unsigned int instructiune);
-int gaseste_dim(int N, unsigned int instructiune);  
-unsigned short binar_in_decimal(unsigned short* numar, int dim, int* N);
-int citeste_operanzi(FILE* file, unsigned short operanzi[SIZE], int N, int dim);
-void afiseaza_intro();
-unsigned int citeste_instructiune(FILE* file);
+int gaseste_dim(int N, unsigned int instructiune);
 
-/* void citeste_fisier(FILE* file)
+/*functii task2*/
+void ushort_print_vector(unsigned short v[SIZE], int n);
+unsigned short binar_in_decimal(unsigned short* numar, int dim, int* N);
+unsigned int citeste_instructiune_checker();
+int citeste_operanzi_checker(unsigned short operanzi[SIZE], int N, int dim);
+void afisare_elemente_task1_checker(int N, int dim, char operatii[8]) 
 {
-    char nume_fisier[SIZE];
-    printf("\nIntroduceti numele/calea absoluta a fisierului de test: ");
-    fscanf(stdin, "%s", nume_fisier);
-    file = fopen(nume_fisier, "r");
-    
-} */
+    printf("%d ", N);
+    char_print_vector(operatii, N);
+    printf("%d ", dim);
+}
 int main()
 {
     /*interpretarea unei instructiuni date avand
     in vedere regulile din task1 al temei 1:
     https://ocw.cs.pub.ro/courses/programare/teme_2021/tema1_2021_cbd*/
 
-    afiseaza_intro();
-
-    FILE* file;
-    char nume_fisier[SIZE];
-    printf("\nIntroduceti numele/calea absoluta a fisierului de test: ");
-    fscanf(stdin, "%s", nume_fisier);
-    file = fopen(nume_fisier, "r");
-    
     unsigned int instructiune;
-    int N, dim ;
+    int N, dim;
     char operatii[8];
 
-    instructiune = citeste_instructiune(file);
+    instructiune = citeste_instructiune_checker();
 
     N = gaseste_N(instructiune);
     gaseste_operatii(operatii, N, instructiune);
     dim = gaseste_dim(N, instructiune);
 
-
-    printf("\nN = ");
-    printf("\033[0;32m");
-    printf("%d", N);
-    printf("\033[0m");
-
-    printf("\nOperatorii sunt: ");
-    printf("\033[0;32m");
-    char_print_vector(operatii, N);
-    printf("\033[0m");
-
-    printf("\nDim = ");
-    printf("\033[0;32m");
-    printf("%d", dim);
-    printf("\033[0m");
-
     /*task 2*/
     unsigned short operanzi[SIZE];
     int numar_de_operanzi;
-
-    numar_de_operanzi = citeste_operanzi(file, operanzi, N, dim);
+    int rezultat;
     
-    printf("\nOperanzii sunt: ");
-    printf("\033[0;32m");
-    ushort_print_vector(operanzi, numar_de_operanzi);
-    printf("\033[0m");
-
-
+    numar_de_operanzi = citeste_operanzi_checker(operanzi, N, dim);
+    
+    rezultat = operanzi[0];
+    for(int i = 1; i < numar_de_operanzi; i++) {
+        switch(operatii[i-1]) {
+            case '+':
+                rezultat += operanzi[i];
+                break;
+            case '-':
+                rezultat -= operanzi[i];
+                break;
+            case '*':
+                rezultat *= operanzi[i];
+                break;
+            case '/':
+                rezultat /= operanzi[i];
+        }
+    }
+    printf("%d", rezultat);
     return 0;
 
 }
-void afiseaza_intro()
+unsigned int citeste_instructiune_checker()
 {
-    char anunt[] = "!!Daca doriti sa dati valorile de la tastatura introduceti orice caracter si apasati enter!!";
-    char spatii4[] = "    ";
-    printf("\033[0;31m");
-    printf("%s%s\n", spatii4, anunt);
-    printf("\033[0m");
-
-
-}
-
-unsigned int citeste_instructiune(FILE* file)
-{
-    /* citeste prima instructiune din file sau de la tastatura (daca file  == NULL)
-    si o returneza*/ 
+    /* citeste prima instructiune de la tastatura
+    si o returneza*/
     unsigned int instructiune;
-    if (file == NULL) {
-        printf("Nici-un fisier gasit!\n");
-        printf("Dati o instrctiune: ");
-        fscanf(stdin, "%u", &instructiune);
-    }
-    else {
-        fscanf(file, "%u", &instructiune);
-        printf("Instructiunea este: ");
-        printf("\033[0;32m");
-        printf("%u", &instructiune);
-        printf("\033[0m");
-    }
+
+    printf("Dati o instrctiune: ");
+    scanf("%u", &instructiune);
     return instructiune;
 }
-
 int gaseste_N(unsigned int instructiune)
 {
     /*returneaza valoarea intreaga determinata de cei mai significtivi
@@ -136,7 +101,7 @@ int gaseste_N(unsigned int instructiune)
 
 void char_print_vector(char v[SIZE], int n)
 {
-    //afiseaza valorile dintr-un vector
+    //afiseaza valorile dintr-un vector de char
     int i;
 
     for (i = 0; i < n; i++) {
@@ -146,7 +111,7 @@ void char_print_vector(char v[SIZE], int n)
 
 void ushort_print_vector(unsigned short v[SIZE], int n)
 {
-    //afiseaza valorile dintr-un vector
+    //afiseaza valorile dintr-un vector de unsigned short
     int i;
 
     for (i = 0; i < n; i++) {
@@ -157,6 +122,7 @@ void ushort_print_vector(unsigned short v[SIZE], int n)
 void gaseste_operatii(char vector_de_operatii[8], int size, unsigned int instructiune)
 {
     //interpreteaza urmatorii 2 * N biti ai intructiunii dupa regula data
+
     instructiune <<= 3;//trecem peste primii 3 biti
     char operatori[4] = "+-*/";
     int i;
@@ -184,10 +150,12 @@ int gaseste_dim(int N, unsigned int instructiune)
 {
     /*returneaza valoarea intreaga determinata de cei mai putin significativ
     4 biti ai instructiunii*/
+
     int permutare_biti = 3 + 2 * N;//unde se afla cei mai putin semnificativi 4 biti
     unsigned int i, masca = 1 << 31, dim = 1;
-    instructiune <<= permutare_biti;
+    instructiune <<= permutare_biti; //aliniem instructiunea cu masca
 
+    //transformare binar pe 4 biti in decimal
     for (i = 0; i < 4; i++) {
         if (masca & instructiune) {
             switch (i) {
@@ -211,7 +179,10 @@ int gaseste_dim(int N, unsigned int instructiune)
     return dim;
 }
 
-unsigned short binar_in_decimal(unsigned short* numar, int dim, int* N) {
+unsigned short binar_in_decimal(unsigned short* numar, int dim, int* N)
+{
+    /* Transforma primul binar din <numar> de dimensiune <dim> in unsigned short si il returneaza.
+     Scadem <N> cu o unitate pt a  tine cont cate numere mai trebuie extrase din inputuri */
     unsigned short masca = 1 << 15;
     unsigned short rez = 0;
     unsigned short copie_numar = (*numar);
@@ -228,45 +199,43 @@ unsigned short binar_in_decimal(unsigned short* numar, int dim, int* N) {
     return rez;
 }
 
-int citeste_operanzi(FILE* file, unsigned short operanzi[SIZE], int N, int dim)
+int calcul_numar_inputuri(int N, int dim)
 {
-    /*functia citeste instrucitunile si deduce operanzii corespunzatori instructiunii din <file> sau
-    <stdin>(daca file == NULL) si returneaza numarul de operanzi gasitit*/
-    int i = 0;
-    int contor = 0, pasi_in_numar = 16 / dim;
-    unsigned short input;
-
+    //calculeaza numarul de inputuri necesare dupa formula data
     int numar_de_inputuri = ((N + 1) * dim) / 16;
+
+    //daca numarul este mai mare decat partea sa intreaga incrementam cu 1
     if ((float)numar_de_inputuri < (float)(((N + 1) * dim) / 16.0)) {
         numar_de_inputuri++;
     }
+    return numar_de_inputuri;
+}
+
+int citeste_operanzi_checker(unsigned short operanzi[SIZE], int N, int dim)
+{
+    int i = 0;
+    int contor_pasi = 0, pasi_in_numar = 16 / dim;//cate grupari de <dim> biti sunt in unsigned short
+    unsigned short input;
+
+    int numar_de_inputuri = calcul_numar_inputuri(N, dim);
     int contor_de_inputuri = numar_de_inputuri;
 
-    printf("\nNumarul de inputuri este:");
-    printf("\033[0;32m");
-    printf("%d", numar_de_inputuri);
-    printf("\033[0m");
-
+    //cat timp avem inputuri de citit
     while (contor_de_inputuri) {
-        if (file == NULL) {
-            printf("\nMai aveti de dat %d input(uri): ", contor_de_inputuri);
-            fscanf(stdin, "%hu", &input);
-        }
-        else {
-            fscanf(file, "%hu", &input);
-            printf("\nInputul %d este: ", numar_de_inputuri - contor_de_inputuri + 1);
-            printf("\033[0;32m");
-            printf("%hu", input);
-            printf("\033[0m");
-        }
+
+        //citire input
+        scanf(stdin, "%hu", &input);
         contor_de_inputuri--;
 
-        contor = 0;
-        while (N >= 0 && contor < pasi_in_numar) {
+        contor_pasi = 0;
+        //cat timp avem nevoie de numere extrase din input si avem numere ramase in input
+        while (N >= 0 && contor_pasi < pasi_in_numar) {
             operanzi[i] = binar_in_decimal(&input, dim, &N);
-            contor++;
+            contor_pasi++;
             i++;
         }
     }
     return i;
 }
+
+
