@@ -1,0 +1,66 @@
+import sys
+
+
+class Graph():
+    def __init__(self, vertices):
+        self.verticies = vertices
+        self.graph = [[0 for column in range(vertices)]
+                      for row in range(vertices)]
+
+    def printSolution(self, src, dest, dist):
+        if(dist[dest] == sys.maxsize):
+            print("There is no path to {}".format(dest))
+        else:
+            print("Shortest distance form {} to {} is {}".format(src, dest, dist[dest]))
+
+    def minDistance(self, dist, visited):
+        min = sys.maxsize
+        for v in range(self.verticies):
+            if(dist[v] < min and visited[v] == False):
+                min = dist[v]
+                index_min = v
+
+        return index_min
+
+    def isShorter(self, origin, destiantion, dist):
+        if dist[destiantion] > dist[origin] + self.graph[destiantion][origin]:
+            return True
+        return False
+
+    def dijkstra_from_to(self, src, dest):
+        dist = [sys.maxsize] * self.verticies
+        visited = [False] * self.verticies
+        dist[src] = 0
+        solution = False
+        while(not solution):
+
+            current_vertext = self.minDistance(dist, visited)
+            visited[current_vertext] = True
+            if(current_vertext == dest):
+                break
+
+            solution = True
+            for adjacent_vertex in range(self.verticies):
+                if self.graph[current_vertext][adjacent_vertex] > 0 and \
+                    visited[adjacent_vertex] == False: 
+                        solution = False
+                        if self.isShorter(current_vertext, adjacent_vertex, dist):
+                            dist[adjacent_vertex] = dist[current_vertext] + \
+                            self.graph[current_vertext][adjacent_vertex]
+
+        self.printSolution(src, dest, dist)
+
+g = Graph(9)
+g.graph = [[0, 4, 0, 0, 0, 0, 0, 8, 0],
+           [4, 0, 8, 0, 0, 0, 0, 11, 0],
+           [0, 8, 0, 7, 0, 4, 0, 0, 2],
+           [0, 0, 7, 0, 0, 14, 0, 0, 0],
+           [0, 0, 0, 0, 0, 0, 0, 0, 0],
+           [0, 0, 4, 14, 0, 0, 2, 0, 0],
+           [0, 0, 0, 0, 0, 2, 0, 1, 6],
+           [8, 11, 0, 0, 0, 0, 1, 0, 7],
+           [0, 0, 2, 0, 0, 0, 6, 7, 0]
+           ]
+src = int(input("Give te starting point: "))
+dest = int(input("Give the end point"))
+g.dijkstra_from_to(src, dest)
