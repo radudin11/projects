@@ -7,11 +7,19 @@ class Graph():
         self.graph = [[0 for column in range(vertices)]
                       for row in range(vertices)]
 
-    def printSolution(self, src, dest, dist):
+    def printSolution1(self, src, dest, dist):
         if(dist[dest] == sys.maxsize):
             print("There is no path to {}".format(dest))
         else:
             print("Shortest distance form {} to {} is {}".format(src, dest, dist[dest]))
+
+    def printSolution2(self, src, dist):
+        print("Distances from node {}: ".format(src))
+        for node in range(self.verticies):
+            if(dist[node] == sys.maxsize):
+                print("There is no path to {}".format(node))
+            else:
+                print("To node {}: {}".format(node, dist[node]))
 
     def minDistance(self, dist, visited):
         min = sys.maxsize
@@ -27,7 +35,10 @@ class Graph():
             return True
         return False
 
-    def dijkstra_from_to(self, src, dest):
+    def dijkstra(self, src, **kwargs):
+        dest = kwargs.get("destination", None)
+        if dest:
+            dest = int(dest)
         dist = [sys.maxsize] * self.verticies
         visited = [False] * self.verticies
         dist[src] = 0
@@ -36,7 +47,7 @@ class Graph():
 
             current_vertext = self.minDistance(dist, visited)
             visited[current_vertext] = True
-            if(current_vertext == dest):
+            if dest and current_vertext == dest:
                 break
 
             solution = True
@@ -47,9 +58,10 @@ class Graph():
                         if self.isShorter(current_vertext, adjacent_vertex, dist):
                             dist[adjacent_vertex] = dist[current_vertext] + \
                             self.graph[current_vertext][adjacent_vertex]
-
-        self.printSolution(src, dest, dist)
-
+        if bool(dest):
+            self.printSolution1(src, dest, dist)
+        else: 
+            self.printSolution2(src, dist)
 g = Graph(9)
 g.graph = [[0, 4, 0, 0, 0, 0, 0, 8, 0],
            [4, 0, 8, 0, 0, 0, 0, 11, 0],
@@ -62,5 +74,5 @@ g.graph = [[0, 4, 0, 0, 0, 0, 0, 8, 0],
            [0, 0, 2, 0, 0, 0, 6, 7, 0]
            ]
 src = int(input("Give te starting point: "))
-dest = int(input("Give the end point"))
-g.dijkstra_from_to(src, dest)
+#dest = int(input("Give the end point: "))
+g.dijkstra(src)
