@@ -3,7 +3,6 @@ def solution(step, size):
         return 1
     return 0
 
-
 def back(step, sol, size):
     for i in range(1, size+1):
         sol[step] = i
